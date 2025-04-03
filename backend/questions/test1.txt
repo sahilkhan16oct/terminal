@@ -1,0 +1,5 @@
+1. Make a file
+2. name test1.txt
+3. write "hello world"
+4. save that file
+5. exit

@@ -1,0 +1,5 @@
+1. make a file name "test3.txt"
+2. open with any editor
+3. write "this is answer 3 "
+4. save it
+5. exit

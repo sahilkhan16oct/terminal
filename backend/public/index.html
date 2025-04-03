@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Terminal</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="login-container">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p id="error-msg"></p>
+  </div>
+
+  <div id="app-container">
+    <div id="logout-container">
+      <button id="logout-btn" onclick="logoutUser()">
+        <img src="logout-icon.png" alt="Logout" />
+      </button>
+    </div>
+    
+    <div id="qa-container">
+      <h3>Q&A Section</h3>
+    
+      <p><strong>Q: How to use the terminal?</strong></p>
+      <p>A: Simply type your commands.</p>
+    
+      <p><strong>Q: What commands can I run?</strong></p>
+      <p>A: Any shell commands supported by the backend.</p>
+    
+      <p><strong>Q: How do I list files in a directory?</strong></p>
+      <p>A: Use <code>ls</code> to list files and directories.</p>
+    
+      <p><strong>Q: How do I navigate between directories?</strong></p>
+      <p>A: Use <code>cd directory_name</code> to move into a directory and <code>cd ..</code> to go back.</p>
+    
+      <p><strong>Q: How do I check my current directory?</strong></p>
+      <p>A: Use <code>pwd</code> to print the current working directory.</p>
+    
+      <p><strong>Q: How do I create a new directory?</strong></p>
+      <p>A: Use <code>mkdir directory_name</code> to create a new folder.</p>
+    
+      <p><strong>Q: How do I create a new file?</strong></p>
+      <p>A: Use <code>touch filename</code> or <code>echo "content" > filename</code> to create a file.</p>
+    
+      <p><strong>Q: How do I delete a file or directory?</strong></p>
+      <p>A: Use <code>rm filename</code> to delete a file, and <code>rm -r directory_name</code> to remove a directory.</p>
+    
+      <p><strong>Q: How do I edit a file in the terminal?</strong></p>
+      <p>A: You can use <code>nano filename</code>, <code>vim filename</code>, or <code>vi filename</code> to edit files.</p>
+    
+      <p><strong>Q: How do I view the contents of a file?</strong></p>
+      <p>A: Use <code>cat filename</code>, <code>less filename</code>, or <code>more filename</code>.</p>
+    </div>
+    
+
+    <div id="terminal-container"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>
