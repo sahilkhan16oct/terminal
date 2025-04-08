@@ -12,11 +12,14 @@ const Questions = ({ username }) => {
   const [testNumber, setTestNumber] = useState(1);
   const [testCount, setTestCount] = useState(null); // ✅ Ensure we track total tests
   const [loading, setLoading] = useState(true);
+  const [score, setScore] = useState(null); // ✅ Track score
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 
   // ✅ Fetch total number of tests
   const fetchTestCount = async () => {
     try {
-      const res = await fetch("http://localhost:4000/api/test-count");
+      const res = await fetch(`http://${API_BASE_URL}/api/test-count`);
       const data = await res.json();
       if (data.success) {
         setTestCount(data.testCount); // ✅ Set total number of tests
@@ -30,7 +33,7 @@ const Questions = ({ username }) => {
   const fetchQuestion = async (index) => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:4000/api/question", {
+      const res = await fetch(`http://${API_BASE_URL}/api/question`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ testNumber: `test${testNumber}`, questionIndex: index, username }),
@@ -82,7 +85,7 @@ const Questions = ({ username }) => {
       fetchQuestion(nextIndex);
     } else {
       try {
-        const res = await fetch("http://localhost:4000/api/validate-test", {
+        const res = await fetch(`http://${API_BASE_URL}/api/validate-test`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ testNumber, username }),
@@ -90,11 +93,13 @@ const Questions = ({ username }) => {
 
         const data = await res.json();
         setIsSuccess(data.success);
+        setScore(data.marks); // ✅ Save score from backend
         setShowModal(true);
 
         if (data.success) {
-          setTestNumber(testNumber + 1); // ✅ Increment test number on success
+          setTestNumber(testNumber + 1);
         }
+
       } catch (error) {
         console.error("Error validating test:", error);
         setIsSuccess(false);
@@ -109,6 +114,7 @@ const Questions = ({ username }) => {
     setCurrentIndex(0);
     setIsLastQuestion(false);
     fetchQuestion(0);
+    setScore(null);
   };
 
   // ✅ Proceed function
@@ -140,11 +146,12 @@ const Questions = ({ username }) => {
       {testNumber > testCount ? (
         <FinalModal show={showModal} />
       ) : (
-        <ResultModal 
-          show={showModal} 
-          isSuccess={isSuccess} 
-          onRetry={handleRetry} 
-          onProceed={handleProceed} 
+        <ResultModal
+          show={showModal}
+          isSuccess={isSuccess}
+          onRetry={handleRetry}
+          onProceed={handleProceed}
+          score={score}
         />
       )}
     </div>

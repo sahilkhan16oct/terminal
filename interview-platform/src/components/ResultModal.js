@@ -1,6 +1,6 @@
 import React from "react";
 
-const ResultModal = ({ show, isSuccess, onRetry, onProceed }) => {
+const ResultModal = ({ show, isSuccess, onRetry, onProceed, score }) => {
   if (!show) return null; // Hide modal if not active
 
   return (
@@ -9,6 +9,9 @@ const ResultModal = ({ show, isSuccess, onRetry, onProceed }) => {
         <h2 style={isSuccess ? styles.passText : styles.failText}>
           {isSuccess ? "🎉 Congratulations! You Passed!" : "❌ Sorry, You Failed!"}
         </h2>
+        <h3 style={styles.scoreText}>
+          {score !== null ? `🏅 Your Score: ${score}/100` : ""}
+        </h3>
 
         {isSuccess ? (
           <button onClick={onProceed} style={styles.successButton}>
@@ -50,6 +53,11 @@ const styles = {
   passText: {
     color: "#28a745",
   },
+  scoreText: {
+    marginTop: "10px",
+    fontSize: "18px",
+    color: "#333",
+  },  
   failText: {
     color: "#dc3545",
   },

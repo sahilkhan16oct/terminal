@@ -7,6 +7,7 @@ const TerminalComponent = ({ username }) => {
   const terminalRef = useRef(null);
   const termInstance = useRef(null);
   const fitAddon = useRef(null);
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
     if (!username || !terminalRef.current) return;
@@ -28,7 +29,7 @@ const TerminalComponent = ({ username }) => {
     term.focus();
 
     // WebSocket Connection
-    const socket = new WebSocket(`ws://localhost:4000?username=${username}`);
+    const socket = new WebSocket(`ws://${API_BASE_URL}?username=${username}`);
 
     socket.onmessage = (event) => term.write(event.data);
     term.onData((data) => socket.send(data));

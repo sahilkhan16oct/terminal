@@ -18,7 +18,10 @@ mongoose.connect("mongodb+srv://innoveotech:LPVlwcASp0OoQ8Dg@azeem.af86m.mongodb
 const userSchema = new mongoose.Schema({
   username: String,
   password: String,
-  test: String
+  test: {
+    type: Object,
+    default: {}
+  }
 });
 const User = mongoose.model('user', userSchema);
 
@@ -133,36 +136,49 @@ app.post('/api/validate-test', async (req, res) => {
   const referenceFilePath = path.join(__dirname, 'answers', `test${testNumber}_answers.txt`);
 
   try {
-    if (!fs.existsSync(userFilePath) || !fs.existsSync(referenceFilePath)) {
-      return res.status(400).json({ success: false, message: "Required files not found" });
-    }
+    let marks = 0;
 
-    let userAnswer = execSync(`sudo cat ${userFilePath}`).toString().trim();
-    const correctAnswer = fs.readFileSync(referenceFilePath, 'utf-8').trim();
+    if (fs.existsSync(userFilePath)) {
+      marks = 40; // File exists => base marks
+      let userAnswer = execSync(`sudo cat ${userFilePath}`).toString().trim();
+      const correctAnswer = fs.readFileSync(referenceFilePath, 'utf-8').trim();
 
-    if (userAnswer === correctAnswer) {
-      // ✅ **Increase test number only if test passed**
-      try {
-        const result = await User.updateOne(
-          { username },
-          { $set: { "test": testNumber } },
-          { upsert: true }
-        );
-        console.log("Update Result:", result);
-      } catch (error) {
-        console.error("Update Error:", error);
+      if (userAnswer === correctAnswer) {
+        marks = 100; // Exact match
+      } else if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+        marks = 75; // Case-insensitive match
       }
-
-
-      return res.json({ success: true, message: "Test passed", nextTest: parseInt(testNumber) + 1 });
     } else {
-      return res.json({ success: false, message: "Test failed" });
+      return res.status(400).json({ success: false, message: "User answer file not found" });
     }
+
+    const passed = marks > 70;
+
+    // ✅ Save test result
+    const testKey = `test${testNumber}`;
+    const updateData = {
+      [`test.${testKey}`]: {
+        marks,
+        passed,
+        date: new Date()
+      }
+    };
+
+    await User.updateOne({ username }, { $set: updateData });
+
+    return res.json({
+      success: passed,              
+      message: passed ? "Test passed" : "Test failed",
+      marks,
+      passed
+    });
+
   } catch (error) {
     console.error("❌ Error validating test:", error);
     return res.status(500).json({ success: false, message: "Server error" });
   }
 });
+
 
 
 
