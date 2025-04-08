@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ResultModal from "./ResultModal";
-import FinalModal from "./FinalModal"; // ✅ Import FinalModal
+import FinalModal from "./FinalModal"; 
+import API_BASE_URL from '../config';
 
 const Questions = ({ username }) => {
   const [question, setQuestion] = useState(null);
@@ -10,10 +11,9 @@ const Questions = ({ username }) => {
   const [showModal, setShowModal] = useState(false);
   const [isSuccess, setIsSuccess] = useState(null);
   const [testNumber, setTestNumber] = useState(1);
-  const [testCount, setTestCount] = useState(null); // ✅ Ensure we track total tests
+  const [testCount, setTestCount] = useState(null); 
   const [loading, setLoading] = useState(true);
-  const [score, setScore] = useState(null); // ✅ Track score
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  const [score, setScore] = useState(null);
 
 
   // ✅ Fetch total number of tests

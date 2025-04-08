@@ -2,12 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import 'xterm/css/xterm.css';
+import API_BASE_URL from '../config';
 
 const TerminalComponent = ({ username }) => {
   const terminalRef = useRef(null);
   const termInstance = useRef(null);
   const fitAddon = useRef(null);
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  
 
   useEffect(() => {
     if (!username || !terminalRef.current) return;
